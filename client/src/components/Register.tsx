@@ -1,6 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import * as z from "zod/v4";
 
 const RegisterSchema = z
@@ -25,6 +27,8 @@ const RegisterSchema = z
 type TRegisterSchema = z.infer<typeof RegisterSchema>;
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -45,8 +49,11 @@ const Register = () => {
         password,
       });
       console.log(responce);
+      toast.success("registered successfully");
+      navigate("/");
     } catch (error) {
       console.log("error submitting data" + error);
+      toast.error("internal server error");
     }
     reset();
   };

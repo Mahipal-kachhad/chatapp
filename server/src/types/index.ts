@@ -23,3 +23,16 @@ export type ApiResponse<T> = {
   data?: T;
   error?: string;
 };
+
+export interface AuthenticateRequest extends Request{
+  body:{
+    email:string;
+    password:string;
+  }
+}
+
+export interface IAuth{
+  email:string;
+  password:string;
+  isAuthenticated:boolean;
+}

@@ -1,4 +1,6 @@
+import axios from "axios";
 import { useState, type ChangeEvent, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 
 interface Data {
   email: string;
@@ -11,13 +13,23 @@ const LoginPage = () => {
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    setData({ email: "", password: "" });
+    const { email, password } = data;
+    try {
+      const responce = await axios.post(
+        "http://localhost:4000/user/authenticate",
+        { email, password }
+      );
+      console.log(responce);
+      setData({ email: "", password: "" });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -61,6 +73,13 @@ const LoginPage = () => {
             />
           </div>
         </form>
+        <p className="text-center">Don't have an account</p>
+        <Link
+          className="block mx-auto w-fit px-6 py-2 my-3 bg-cyan-800 rounded text-white"
+          to={"/register"}
+        >
+          Register
+        </Link>
       </div>
     </div>
   );
