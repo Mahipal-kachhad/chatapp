@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import * as z from "zod/v4";
 
@@ -33,8 +34,20 @@ const Register = () => {
     resolver: zodResolver(RegisterSchema),
   });
 
-  const onSubmit = (data: TRegisterSchema) => {
+  const onSubmit = async (data: TRegisterSchema) => {
     console.log(data);
+    const { firstName, lastName, email, password } = data;
+    try {
+      const responce = await axios.post("http://localhost:4000/user/register", {
+        firstName,
+        lastName,
+        email,
+        password,
+      });
+      console.log(responce);
+    } catch (error) {
+      console.log("error submitting data" + error);
+    }
     reset();
   };
 
@@ -56,7 +69,7 @@ const Register = () => {
                 {...register("firstName")}
               />
               {errors.firstName && (
-                <p className="text-red-900">{errors.firstName.message}</p>
+                <p className="text-red-700">{errors.firstName.message}</p>
               )}
             </div>
             <div className="mb-5">
@@ -69,7 +82,7 @@ const Register = () => {
                 {...register("lastName")}
               />
               {errors.lastName && (
-                <p className="text-red-900">{errors.lastName?.message}</p>
+                <p className="text-red-700">{errors.lastName?.message}</p>
               )}
             </div>
           </div>
@@ -83,7 +96,7 @@ const Register = () => {
               {...register("email")}
             />
             {errors.email && (
-              <p className="text-red-900">{errors.email.message}</p>
+              <p className="text-red-700">{errors.email.message}</p>
             )}
           </div>
           <div className="mb-5">
@@ -96,7 +109,7 @@ const Register = () => {
               {...register("password")}
             />
             {errors.password && (
-              <p className="text-red-900">{errors.password.message}</p>
+              <p className="text-red-700">{errors.password.message}</p>
             )}
           </div>
           <div className="mb-5">
@@ -109,7 +122,7 @@ const Register = () => {
               {...register("rePassword")}
             />
             {errors.rePassword && (
-              <p className="text-red-900">{errors.rePassword.message}</p>
+              <p className="text-red-700">{errors.rePassword.message}</p>
             )}
           </div>
           <input

@@ -7,10 +7,16 @@ export const registerUser = async (
   res: Response<ApiResponse<IUser>>
 ) => {
   try {
-    const { name, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
     const avatar = req.file?.path;
-    
-    const user = await userModel.create({ name, email, password, avatar });
+
+    const user = await userModel.create({
+      firstName,
+      lastName,
+      email,
+      password,
+      avatar,
+    });
     res.status(201).json({
       success: true,
       data: user,

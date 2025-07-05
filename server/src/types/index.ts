@@ -1,7 +1,8 @@
 import { Request } from "express";
 
 export interface IUser {
-  name: string;
+  firstName: string;
+  lastName?: string;
   email: string;
   password: string;
   avatar?: string;
@@ -9,7 +10,8 @@ export interface IUser {
 
 export interface RegisterRequest extends Request {
   body: {
-    name: string;
+    firstName: string;
+    lastName?: string;
     email: string;
     password: string;
   };
