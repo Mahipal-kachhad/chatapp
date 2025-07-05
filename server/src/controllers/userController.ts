@@ -3,7 +3,6 @@ import userModel from "../models/userModel";
 import {
   ApiResponse,
   AuthenticateRequest,
-  IAuth,
   IUser,
   RegisterRequest,
 } from "../types";
@@ -37,13 +36,19 @@ export const registerUser = async (
 
 export const authenticateUser = async (
   req: AuthenticateRequest,
-  res: Response<ApiResponse<IAuth>>
+  res: Response<ApiResponse<IUser>>
 ) => {
+  console.log(req.body)
   try {
     const { email, password } = req.body;
-    const authData = await userModel.findOne({ email: email });
-    res.status(300).json({ success: true });
-    console.log(authData);
+    const user = await userModel.findOne({
+      email,
+      password,
+    });
+    res.status(200).json({
+      success: true,
+      data: user,
+    });
   } catch (error: any) {
     res.status(500).json({
       success: false,

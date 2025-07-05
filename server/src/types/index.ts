@@ -20,7 +20,7 @@ export interface RegisterRequest extends Request {
 
 export type ApiResponse<T> = {
   success: boolean;
-  data?: T;
+  data?: T | null;
   error?: string;
 };
 
@@ -31,8 +31,3 @@ export interface AuthenticateRequest extends Request{
   }
 }
 
-export interface IAuth{
-  email:string;
-  password:string;
-  isAuthenticated:boolean;
-}

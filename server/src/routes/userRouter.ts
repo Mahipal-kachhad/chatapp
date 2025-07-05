@@ -12,9 +12,6 @@ router.post(
   registerUser
 );
 
-router.post(
-  "/authenticate",
-  authenticateUser
-)
+router.post("/authenticate", authenticateUser);
 
 export default router;
