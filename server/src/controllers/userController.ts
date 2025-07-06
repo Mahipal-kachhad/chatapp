@@ -38,17 +38,24 @@ export const authenticateUser = async (
   req: AuthenticateRequest,
   res: Response<ApiResponse<IUser>>
 ) => {
-  console.log(req.body)
+  console.log(req.body);
   try {
     const { email, password } = req.body;
     const user = await userModel.findOne({
       email,
       password,
     });
-    res.status(200).json({
-      success: true,
-      data: user,
-    });
+    if (!user) {
+      res.status(404).json({
+        success: false,
+        data: user,
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        data: user,
+      });
+    }
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -56,3 +63,4 @@ export const authenticateUser = async (
     });
   }
 };
+

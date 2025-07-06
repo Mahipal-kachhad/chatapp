@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Data {
   email: string;
   password: string;
 }
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState<Data>({
     email: "",
     password: "",
@@ -26,8 +28,13 @@ const LoginPage = () => {
         { email, password }
       );
       console.log(responce);
-      setData({ email: "", password: "" });
+      if (responce.data.success === true) {
+        sessionStorage.setItem("user", JSON.stringify(responce.data.data));
+        setData({ email: "", password: "" });
+        navigate("/dashboard");
+      }
     } catch (error) {
+      toast.error("login failed");
       console.log(error);
     }
   };

@@ -17,7 +17,6 @@ function App() {
       </div>
       <Toaster position="top-center" reverseOrder={false}/>  
     </div>
-
   );
 }
 

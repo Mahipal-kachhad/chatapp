@@ -11,3 +11,4 @@ app.use(express.static(path.join(__dirname, "../uploads")));
 app.use("/user", userRoutes);
 
 export default app;
+ 

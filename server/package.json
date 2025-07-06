@@ -18,7 +18,7 @@
     "express": "^5.1.0",
     "mongoose": "^8.16.1",
     "multer": "^2.0.1",
-    "zod": "^3.25.73"
+    "zod": "^3.25.74"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
