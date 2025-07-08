@@ -1,5 +1,7 @@
 import { Response } from "express";
 import userModel from "../models/userModel";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import {
   ApiResponse,
   AuthenticateRequest,
@@ -14,12 +16,13 @@ export const registerUser = async (
   try {
     const { firstName, lastName, email, password } = req.body;
     const avatar = req.file?.path;
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await userModel.create({
       firstName,
       lastName,
       email,
-      password,
+      password: hashedPassword,
       avatar,
     });
     res.status(201).json({
@@ -36,24 +39,37 @@ export const registerUser = async (
 
 export const authenticateUser = async (
   req: AuthenticateRequest,
-  res: Response<ApiResponse<IUser>>
+  res: Response<ApiResponse<{ user: IUser; token: string }>>
 ) => {
   console.log(req.body);
   try {
     const { email, password } = req.body;
     const user = await userModel.findOne({
       email,
-      password,
     });
     if (!user) {
       res.status(401).json({
         success: false,
-        data: user,
+        error: "invalid credentials",
       });
     } else {
+      const isMatch = await bcrypt.compare(password, user.password!);
+
+      if (!isMatch)
+        res.status(401).json({
+          success: false,
+          error: "invalid credentials",
+        });
+
+      const token = jwt.sign(
+        { userId: user._id },
+        process.env.JWT_SECRET || "MAka0055",
+        { expiresIn: "1h" }
+      );
+
       res.status(200).json({
         success: true,
-        data: user,
+        data: { user, token },
       });
     }
   } catch (error: any) {
@@ -63,4 +79,3 @@ export const authenticateUser = async (
     });
   }
 };
-
