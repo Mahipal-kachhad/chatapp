@@ -7,16 +7,14 @@ import Dashboard from "./components/dashboard";
 
 function App() {
   return (
-    <div className="h-screen w-full bg-gray-200 overflow-hidden">
-      <div className="max-w-7xl mx-auto h-screen">
-        <Routes>
-          <Route path="/" element={<LoginPage/>}/>
-          <Route path="/register" element={<Register/>}/>
-          <Route path="/dashboard" element={<Dashboard/>}/>
+        <div>
+          <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
-      </div>
-      <Toaster position="top-center" reverseOrder={false}/>  
-    </div>
+      <Toaster position="top-center" reverseOrder={false} />
+        </div>
   );
 }
 

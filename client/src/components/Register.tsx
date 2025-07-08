@@ -28,7 +28,6 @@ type TRegisterSchema = z.infer<typeof RegisterSchema>;
 
 const Register = () => {
   const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
@@ -59,83 +58,85 @@ const Register = () => {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center">
-      <div className="bg-blue-200 px-5 rounded-md">
-        <h1 className="py-4 text-center text-2xl font-medium">
+    <div className="h-screen flex justify-center items-center bg-[#E5DDD5]">
+      <div className="bg-white px-8 py-8 rounded-md shadow-lg w-full max-w-md border border-gray-200">
+        <h1 className="py-4 text-center text-2xl font-semibold text-gray-800">
           Register Your Self
         </h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex gap-4">
-            <div className="mb-5">
-              <label className="block mb-1" htmlFor="firstName">
+            <div className="mb-5 flex-1">
+              <label className="block mb-1 text-gray-700" htmlFor="firstName">
                 First Name
               </label>
               <input
-                className="bg-gray-200 w-full border rounded p-2"
+                className="bg-gray-100 w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
                 id="firstName"
                 {...register("firstName")}
               />
               {errors.firstName && (
-                <p className="text-red-700">{errors.firstName.message}</p>
+                <p className="text-red-700 text-sm">{errors.firstName.message}</p>
               )}
             </div>
-            <div className="mb-5">
-              <label className="block mb-1" htmlFor="lastName">
+            <div className="mb-5 flex-1">
+              <label className="block mb-1 text-gray-700" htmlFor="lastName">
                 Last Name
               </label>
               <input
-                className="bg-gray-200 w-full border rounded p-2"
+                className="bg-gray-100 w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
                 id="lastName"
                 {...register("lastName")}
               />
               {errors.lastName && (
-                <p className="text-red-700">{errors.lastName?.message}</p>
+                <p className="text-red-700 text-sm">{errors.lastName?.message}</p>
               )}
             </div>
           </div>
           <div className="mb-5">
-            <label className="block mb-1" htmlFor="email">
+            <label className="block mb-1 text-gray-700" htmlFor="email">
               Email
             </label>
             <input
-              className="bg-gray-200 w-full border rounded p-2"
+              className="bg-gray-100 w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
               id="email"
               {...register("email")}
             />
             {errors.email && (
-              <p className="text-red-700">{errors.email.message}</p>
+              <p className="text-red-700 text-sm">{errors.email.message}</p>
             )}
           </div>
           <div className="mb-5">
-            <label className="block mb-1" htmlFor="password">
+            <label className="block mb-1 text-gray-700" htmlFor="password">
               Password
             </label>
             <input
-              className="bg-gray-200 w-full border rounded p-2"
+              className="bg-gray-100 w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
               id="password"
+              type="password"
               {...register("password")}
             />
             {errors.password && (
-              <p className="text-red-700">{errors.password.message}</p>
+              <p className="text-red-700 text-sm">{errors.password.message}</p>
             )}
           </div>
           <div className="mb-5">
-            <label className="block mb-1" htmlFor="rePassword">
+            <label className="block mb-1 text-gray-700" htmlFor="rePassword">
               Reenter Password
             </label>
             <input
-              className="bg-gray-200 w-full border rounded p-2"
+              className="bg-gray-100 w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
               id="rePassword"
+              type="password"
               {...register("rePassword")}
             />
             {errors.rePassword && (
-              <p className="text-red-700">{errors.rePassword.message}</p>
+              <p className="text-red-700 text-sm">{errors.rePassword.message}</p>
             )}
           </div>
           <input
             type="submit"
             value="Register"
-            className="px-6 py-2 bg-cyan-900 block mx-auto rounded text-white mb-4"
+            className="px-6 py-2 bg-green-500 hover:bg-green-600 block mx-auto rounded text-white font-semibold mb-4 transition-colors duration-200"
           />
         </form>
       </div>
