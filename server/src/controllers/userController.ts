@@ -46,7 +46,7 @@ export const authenticateUser = async (
       password,
     });
     if (!user) {
-      res.status(404).json({
+      res.status(401).json({
         success: false,
         data: user,
       });
