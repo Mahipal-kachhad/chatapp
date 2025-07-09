@@ -41,7 +41,6 @@ export const authenticateUser = async (
   req: AuthenticateRequest,
   res: Response<ApiResponse<{ user: IUser; token: string }>>
 ) => {
-  console.log(req.body);
   try {
     const { email, password } = req.body;
     const user = await userModel.findOne({
@@ -54,7 +53,6 @@ export const authenticateUser = async (
       });
     } else {
       const isMatch = await bcrypt.compare(password, user.password!);
-
       if (!isMatch)
         res.status(401).json({
           success: false,

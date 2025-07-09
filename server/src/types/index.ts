@@ -46,3 +46,5 @@ export interface NewMessageRequest extends Request {
     message: string;
   };
 }
+
+
