@@ -30,21 +30,3 @@ export interface AuthenticateRequest extends Request{
     password:string;
   }
 }
-
-export interface IMessage {
-  sender:string;
-  receiver:string;
-  timeStamp:string;
-  message:string;
-}
-
-export interface NewMessageRequest extends Request {
-  body: {
-    sender: string;
-    receiver: string;
-    timeStamp: string;
-    message: string;
-  };
-}
-
-

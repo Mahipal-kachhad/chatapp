@@ -38,7 +38,6 @@ const Register = () => {
   });
 
   const onSubmit = async (data: TRegisterSchema) => {
-    console.log(data);
     const { firstName, lastName, email, password } = data;
     try {
       const responce = await axios.post("http://localhost:4000/user/register", {
@@ -48,13 +47,15 @@ const Register = () => {
         password,
       });
       console.log(responce);
-      toast.success("registered successfully");
-      navigate("/");
+      if (responce.data.success) {
+        toast.success("registered successfully");
+        navigate("/");
+        reset();
+      } else toast.error("error submitting data");
     } catch (error) {
-      console.log("error submitting data" + error);
+      console.log(error);
       toast.error("internal server error");
     }
-    reset();
   };
 
   return (
@@ -75,7 +76,9 @@ const Register = () => {
                 {...register("firstName")}
               />
               {errors.firstName && (
-                <p className="text-red-700 text-sm">{errors.firstName.message}</p>
+                <p className="text-red-700 text-sm">
+                  {errors.firstName.message}
+                </p>
               )}
             </div>
             <div className="mb-5 flex-1">
@@ -88,7 +91,9 @@ const Register = () => {
                 {...register("lastName")}
               />
               {errors.lastName && (
-                <p className="text-red-700 text-sm">{errors.lastName?.message}</p>
+                <p className="text-red-700 text-sm">
+                  {errors.lastName?.message}
+                </p>
               )}
             </div>
           </div>
@@ -130,7 +135,9 @@ const Register = () => {
               {...register("rePassword")}
             />
             {errors.rePassword && (
-              <p className="text-red-700 text-sm">{errors.rePassword.message}</p>
+              <p className="text-red-700 text-sm">
+                {errors.rePassword.message}
+              </p>
             )}
           </div>
           <input

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import type { Contact, Message, Messages } from "../../interfaces/Props";
 import ChatWindow from "./MainChat";
 import Sidebar from "./Sidebar";
-import { io, Socket } from "socket.io-client";
 
 const initialContacts: Contact[] = [
   {
@@ -109,36 +108,12 @@ const Dashboard = () => {
   const [messages, setMessages] = useState<Messages>(initialMessages);
   const [activeContactId, setActiveContactId] = useState<string | null>(null);
   const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [socket, setSocket] = useState<Socket | null>(null);
-
-  useEffect(() => {
-    const newSocket = io("http://localhost:4000");
-    setSocket(newSocket);
-    return () => {
-      newSocket.close();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (socket) {
-      socket.on("message", (message: Message) => {
-        setMessages((prevMessages) => {
-          const newMessages = { ...prevMessages };
-          if (!newMessages[message.sender]) {
-            newMessages[message.sender] = [];
-          }
-          newMessages[message.sender].push(message);
-          return newMessages;
-        });
-      });
-    }
-  }, [socket]);
 
   const activeContact = contacts.find((c) => c.id === activeContactId);
   const activeMessages = activeContactId ? messages[activeContactId] || [] : [];
 
   const handleSendMessage = (text: string) => {
-    if (!activeContactId || !socket) return;
+    if (!activeContactId) return;
 
     const newMessage: Message = {
       id: Date.now(),
@@ -149,8 +124,6 @@ const Dashboard = () => {
         minute: "2-digit",
       }),
     };
-
-    socket.emit("sendMessage", newMessage);
 
     setMessages((prevMessages) => ({
       ...prevMessages,
