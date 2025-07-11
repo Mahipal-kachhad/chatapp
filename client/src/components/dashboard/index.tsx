@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import type { Contact, Message, Messages } from "../../interfaces/Props";
 import ChatWindow from "./MainChat";
 import Sidebar from "./Sidebar";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const initialContacts: Contact[] = [
   {
@@ -108,9 +110,23 @@ const Dashboard = () => {
   const [messages, setMessages] = useState<Messages>(initialMessages);
   const [activeContactId, setActiveContactId] = useState<string | null>(null);
   const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
 
+  const navigate = useNavigate();
   const activeContact = contacts.find((c) => c.id === activeContactId);
   const activeMessages = activeContactId ? messages[activeContactId] || [] : [];
+
+  useEffect(() => {
+    const storageUser = sessionStorage.getItem("user");
+    const user = storageUser ? JSON.parse(storageUser) : null;
+    if (!user) {
+      toast.error("please Login");
+      navigate("/");
+    } else {
+      setLoading(false);
+      console.log(user);
+    }
+  }, [navigate]);
 
   const handleSendMessage = (text: string) => {
     if (!activeContactId) return;
@@ -144,6 +160,13 @@ const Dashboard = () => {
       setActiveContactId(contacts[0].id);
     }
   }, [contacts]);
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <h1 className="text-green-600 text-lg">loading</h1>
+      </div>
+    );
 
   return (
     <main className="h-screen w-full bg-gray-200 font-sans antialiased">

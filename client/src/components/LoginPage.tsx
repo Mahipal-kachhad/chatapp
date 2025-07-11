@@ -1,7 +1,8 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import type { ApiErrorResponse } from "../interfaces/Props";
 
 interface Data {
   email: string;
@@ -29,12 +30,18 @@ const LoginPage = () => {
       );
       console.log(responce);
       if (responce.data.success === true) {
-        sessionStorage.setItem("user", JSON.stringify(responce.data.data));
+        sessionStorage.setItem("user", JSON.stringify(responce.data.data.user));
+        sessionStorage.setItem(
+          "token",
+          JSON.stringify(responce.data.data.token)
+        );
         setData({ email: "", password: "" });
         navigate("/dashboard");
       }
-    } catch (error) {
-      toast.error("login failed");
+    } catch (err) {
+      const error = err as AxiosError<ApiErrorResponse>;
+      if (axios.isAxiosError<ApiErrorResponse>(error) && error.response)
+        toast.error(error.response.data.error);
       console.log(error);
     }
   };

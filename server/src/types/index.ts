@@ -24,9 +24,33 @@ export type ApiResponse<T> = {
   error?: string;
 };
 
-export interface AuthenticateRequest extends Request{
-  body:{
-    email:string;
-    password:string;
-  }
+export interface AuthenticateRequest extends Request {
+  body: {
+    email: string;
+    password: string;
+  };
+}
+
+export interface IMessage {
+  sender: string;
+  receiver: string;
+  message: string;
+  timeStamp: string;
+}
+
+export interface NewMessageRequest {
+  body: IMessage;
+}
+
+export interface GetMessagesRequest {
+  body: {
+    sender: string;
+    receiver: string;
+  };
+}
+
+export interface DeleteMessageRequest {
+  body: {
+    id: string;
+  };
 }

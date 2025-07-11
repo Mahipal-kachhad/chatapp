@@ -66,3 +66,8 @@ export interface ChatWindowProps {
   onSendMessage: (message: string) => void;
   onMenuClick: () => void;
 }
+
+export interface ApiErrorResponse {
+  success: boolean;
+  error: string;
+}
