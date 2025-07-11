@@ -6,6 +6,8 @@ export interface IUser {
   email: string;
   password: string;
   avatar?: string;
+  _id: string;
+  __v: number;
 }
 
 export interface RegisterRequest extends Request {
@@ -35,7 +37,10 @@ export interface IMessage {
   sender: string;
   receiver: string;
   message: string;
-  timeStamp: string;
+  createdAt: string;
+  updatedAt: string;
+  _id: string;
+  __v: string;
 }
 
 export interface NewMessageRequest {

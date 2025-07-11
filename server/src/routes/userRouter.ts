@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { authenticateUser, registerUser } from "../controllers/userController";
+import {
+  authenticateUser,
+  getAllUser,
+  registerUser,
+} from "../controllers/userController";
 import upload from "../middlewares/Upload";
 import { validateRegister } from "../middlewares/validateRegister";
 import { LoginSchema, RegisterSchema } from "../types/schema";
@@ -12,7 +16,7 @@ router.post(
   upload.single("avatar"),
   registerUser
 );
-
 router.post("/authenticate", validateLogin(LoginSchema), authenticateUser);
+router.get("/", getAllUser);
 
 export default router;

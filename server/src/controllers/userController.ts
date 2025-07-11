@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import userModel from "../models/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -70,6 +70,28 @@ export const authenticateUser = async (
         data: { user, token },
       });
     }
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+export const getAllUser = async (
+  req: Request,
+  res: Response<ApiResponse<{}[]>>
+) => {
+  try {
+    const usersData = await userModel.find({});
+    const users = usersData.map((val) => {
+      const { firstName, lastName, _id } = val;
+      return { firstName, lastName, _id };
+    });
+    res.status(200).json({
+      success: true,
+      data: users,
+    });
   } catch (error: any) {
     res.status(500).json({
       success: false,

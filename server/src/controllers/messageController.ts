@@ -32,11 +32,25 @@ export const getMessages = async (
 ) => {
   try {
     const { sender, receiver } = req.body;
-    const messages = await messageModel.find({ sender, receiver });
-    res.status(200).json({
-      success: true,
-      data: messages,
-    });
+    if (!sender || !receiver) {
+      res.status(500).json({
+        success: false,
+        error: "invalid request",
+      });
+    } else {
+      const messages = await messageModel
+        .find({
+          $or: [
+            { sender, receiver },
+            { sender: receiver, receiver: sender },
+          ],
+        })
+        .sort({ createdAt: 1 });
+      res.status(200).json({
+        success: true,
+        data: messages,
+      });
+    }
   } catch (error: any) {
     res.status(500).json({
       success: false,
