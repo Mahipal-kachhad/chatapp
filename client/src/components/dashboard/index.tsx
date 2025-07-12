@@ -46,9 +46,10 @@ const Dashboard = () => {
         const allUser = response.data.data;
         if (user) {
           const otherUser = allUser.filter((u: ApiUser) => u._id !== user._id);
+          console.log(otherUser);
 
           const contactData = otherUser.map((u: ApiUser) => ({
-            id: user._id,
+            id: u._id,
             name: `${u.firstName} ${u.lastName}`,
             lastMessage: "",
             timeStamp: "",
@@ -79,9 +80,10 @@ const Dashboard = () => {
       if (activeContactId && user) {
         setMessages((prev) => ({ ...prev, [activeContactId]: [] }));
         try {
-          const response = await axios.post("http://localhost:4000/message", 
-            { sender: user._id, receiver: activeContactId },
-          );
+          const response = await axios.post("http://localhost:4000/message", {
+            sender: user._id,
+            receiver: activeContactId,
+          });
           setMessages((prev) => ({
             ...prev,
             [activeContactId]: response.data.data.map((msg: IMessage) => ({

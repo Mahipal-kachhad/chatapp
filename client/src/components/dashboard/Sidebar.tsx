@@ -117,7 +117,7 @@ const Sidebar: FC<SidebarProps> = ({
                 contact={contact}
                 onClick={() => {
                   onContactSelect(contact.id);
-                  setSidebarOpen(false); // Close sidebar on mobile after selection
+                  setSidebarOpen(false);
                 }}
                 isActive={contact.id === activeContactId}
               />
