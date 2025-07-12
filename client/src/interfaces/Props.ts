@@ -1,8 +1,28 @@
 import type { Dispatch, SetStateAction } from "react";
 
+export interface ApiUser {
+  firstName: string;
+  lastName: string;
+  _id: string;
+}
+
 export interface User {
+  id: string;
   name: string;
-  avatar: string;
+  lastMessage: string;
+  timeStamp: string;
+  unread: number;
+  online: boolean;
+}
+
+export interface IMessage {
+  sender: string;
+  receiver: string;
+  message: string;
+  createdAt: string;
+  updatedAt: string;
+  _id: string;
+  __v: string;
 }
 
 export interface Contact {
@@ -15,7 +35,7 @@ export interface Contact {
 }
 
 export interface Message {
-  id: number;
+  id: string;
   sender: string;
   text: string;
   time: string;
@@ -30,7 +50,8 @@ export interface Messages {
 }
 
 export interface UserProfileProps {
-  user: User;
+  user: ApiUser | null;
+  onLogout: () => void;
 }
 
 export interface ContactItemProps {
@@ -45,6 +66,8 @@ export interface SidebarProps {
   activeContactId: string | null;
   isSidebarOpen: boolean;
   setSidebarOpen: Dispatch<SetStateAction<boolean>>;
+  currentUser: ApiUser | null;
+  onLogout: () => void;
 }
 
 export interface ChatHeaderProps {
@@ -54,6 +77,7 @@ export interface ChatHeaderProps {
 
 export interface MessageBubbleProps {
   message: Message;
+  currentUser: ApiUser | null;
 }
 
 export interface MessageInputProps {
@@ -65,6 +89,7 @@ export interface ChatWindowProps {
   messages: Message[];
   onSendMessage: (message: string) => void;
   onMenuClick: () => void;
+  currentUser: ApiUser | null;
 }
 
 export interface ApiErrorResponse {

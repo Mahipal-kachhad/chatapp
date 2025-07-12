@@ -1,29 +1,20 @@
 import { useEffect, useRef, useState, type FC } from "react";
-import type { ChatHeaderProps, ChatWindowProps, MessageBubbleProps, MessageInputProps, Users } from "../../interfaces/Props";
-import { ChevronsRight, Menu, MoreVertical, Paperclip, Phone, Send, Smile, Video } from "lucide-react";
-
-const users: Users = {
-  user1: {
-    name: "You",
-    avatar: "https://placehold.co/100x100/7F56D9/FFFFFF?text=Y",
-  },
-  user2: {
-    name: "Alex",
-    avatar: "https://placehold.co/100x100/00A884/FFFFFF?text=A",
-  },
-  user3: {
-    name: "Samantha",
-    avatar: "https://placehold.co/100x100/F79009/FFFFFF?text=S",
-  },
-  user4: {
-    name: "Michael",
-    avatar: "https://placehold.co/100x100/10B981/FFFFFF?text=M",
-  },
-  user5: {
-    name: "Emily",
-    avatar: "https://placehold.co/100x100/3B82F6/FFFFFF?text=E",
-  },
-};
+import type {
+  ChatHeaderProps,
+  ChatWindowProps,
+  MessageBubbleProps,
+  MessageInputProps,
+} from "../../interfaces/Props";
+import {
+  ChevronsRight,
+  Menu,
+  MoreVertical,
+  Paperclip,
+  Phone,
+  Send,
+  Smile,
+  Video,
+} from "lucide-react";
 
 const ChatHeader: FC<ChatHeaderProps> = ({ contact, onMenuClick }) => {
   if (!contact) return null;
@@ -35,7 +26,9 @@ const ChatHeader: FC<ChatHeaderProps> = ({ contact, onMenuClick }) => {
         </button>
         <div className="relative">
           <img
-            src={users[contact.id].avatar}
+            src={`https://placehold.co/100x100/00A884/FFFFFF?text=${contact.name.charAt(
+              0
+            )}`}
             alt={contact.name}
             className="w-10 h-10 rounded-full"
           />
@@ -62,8 +55,8 @@ const ChatHeader: FC<ChatHeaderProps> = ({ contact, onMenuClick }) => {
   );
 };
 
-const MessageBubble: FC<MessageBubbleProps> = ({ message }) => {
-  const isSent = message.sender === "user1";
+const MessageBubble: FC<MessageBubbleProps> = ({ message, currentUser }) => {
+  const isSent = message.sender === currentUser?._id;
   return (
     <div
       className={`flex items-end space-x-2 ${
@@ -133,6 +126,7 @@ const ChatWindow: FC<ChatWindowProps> = ({
   messages,
   onSendMessage,
   onMenuClick,
+  currentUser
 }) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -161,7 +155,7 @@ const ChatWindow: FC<ChatWindowProps> = ({
       <ChatHeader contact={contact} onMenuClick={onMenuClick} />
       <div className="flex-1 min-h-0 p-6 overflow-y-auto space-y-4 scrollbar-thin scrollbar-thumb-gray-300">
         {messages.map((msg) => (
-          <MessageBubble key={msg.id} message={msg} />
+          <MessageBubble key={msg.id} message={msg} currentUser={currentUser}/>
         ))}
         <div ref={messagesEndRef} />
       </div>

@@ -1,69 +1,80 @@
-import { useState, type FC } from "react";
-import type { ContactItemProps, SidebarProps, UserProfileProps, Users } from "../../interfaces/Props";
-import { MoreVertical, Search, X } from "lucide-react";
+import { useState, useMemo, type FC } from "react";
+import type {
+  Contact,
+  ContactItemProps,
+  SidebarProps,
+  UserProfileProps,
+} from "../../interfaces/Props";
+import { LogOut, Search } from "lucide-react";
 
+const UserProfile: FC<UserProfileProps> = ({ user, onLogout }) => {
+  if (!user) return null;
+  const userName = `${user.firstName} ${user.lastName}`;
+  const userInitial = user.firstName.charAt(0);
 
-const users: Users = {
-  user1: {
-    name: "You",
-    avatar: "https://placehold.co/100x100/7F56D9/FFFFFF?text=Y",
-  },
-  user2: {
-    name: "Alex",
-    avatar: "https://placehold.co/100x100/00A884/FFFFFF?text=A",
-  },
-  user3: {
-    name: "Samantha",
-    avatar: "https://placehold.co/100x100/F79009/FFFFFF?text=S",
-  },
-  user4: {
-    name: "Michael",
-    avatar: "https://placehold.co/100x100/10B981/FFFFFF?text=M",
-  },
-  user5: {
-    name: "Emily",
-    avatar: "https://placehold.co/100x100/3B82F6/FFFFFF?text=E",
-  },
+  return (
+    <div className="flex items-center space-x-4 p-3 border-b border-gray-200">
+      <img
+        src={`https://placehold.co/100x100/7F56D9/FFFFFF?text=${userInitial}`}
+        alt={userName}
+        className="w-10 h-10 rounded-full"
+      />
+      <div className="flex-1 min-w-0">
+        <h3 className="font-semibold text-gray-800 truncate">{userName}</h3>
+      </div>
+      <button onClick={onLogout} className="text-gray-500 hover:text-red-500">
+        <LogOut size={20} />
+      </button>
+    </div>
+  );
 };
 
-const UserProfile: FC<UserProfileProps> = ({ user }) => (
-  <div className="p-3 bg-gray-100 flex items-center space-x-4">
-    <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full" />
-    <div>
-      <h3 className="font-semibold text-gray-800 text-md">{user.name}</h3>
+const SearchBar: FC<{
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+}> = ({ searchQuery, setSearchQuery }) => (
+  <div className="p-3">
+    <div className="relative">
+      <input
+        type="text"
+        placeholder="Search or start new chat"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="w-full bg-gray-100 border border-gray-200 rounded-lg py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-green-500"
+      />
+      <div className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+        <Search size={18} />
+      </div>
     </div>
   </div>
 );
 
 const ContactItem: FC<ContactItemProps> = ({ contact, onClick, isActive }) => (
   <li
-    className={`flex items-center p-3 cursor-pointer transition-all duration-200 ease-in-out ${
-      isActive ? "bg-gray-200" : "hover:bg-gray-100"
-    }`}
     onClick={onClick}
+    className={`flex items-center space-x-4 p-3 cursor-pointer hover:bg-gray-100 ${
+      isActive ? "bg-gray-100" : ""
+    }`}
   >
     <div className="relative">
       <img
-        src={users[contact.id].avatar}
+        src={`https://placehold.co/100x100/00A884/FFFFFF?text=${contact.name.charAt(
+          0
+        )}`}
         alt={contact.name}
         className="w-12 h-12 rounded-full"
       />
+      {/* Online status indicator*/}
     </div>
-    <div className="flex-1 ml-3 border-t border-gray-200 pt-3">
-      <div className="flex justify-between">
-        <p className="font-semibold text-gray-800">{contact.name}</p>
-        <p
-          className={`text-xs ${
-            contact.unread > 0 ? "text-green-500 font-bold" : "text-gray-500"
-          }`}
-        >
-          {contact.timestamp}
-        </p>
+    <div className="flex-1 min-w-0 border-b border-gray-200 pb-3">
+      <div className="flex justify-between items-center">
+        <h3 className="font-semibold text-gray-800 truncate">{contact.name}</h3>
+        <p className="text-xs text-gray-400">{contact.timestamp}</p>
       </div>
       <div className="flex justify-between items-center mt-1">
-        <p className="text-sm text-gray-600 truncate">{contact.lastMessage}</p>
+        <p className="text-sm text-gray-500 truncate">{contact.lastMessage}</p>
         {contact.unread > 0 && (
-          <span className="bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+          <span className="bg-green-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
             {contact.unread}
           </span>
         )}
@@ -78,68 +89,43 @@ const Sidebar: FC<SidebarProps> = ({
   activeContactId,
   isSidebarOpen,
   setSidebarOpen,
+  currentUser,
+  onLogout,
 }) => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredContacts = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredContacts = useMemo(() => {
+    return contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [contacts, searchQuery]);
 
   return (
     <aside
-      className={`absolute md:relative z-20 h-full w-full md:w-1/3 xl:w-1/4 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out transform ${
+      className={`absolute md:relative z-20 flex flex-col h-full bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out transform ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } md:translate-x-0`}
+      } md:translate-x-0 w-full md:w-1/3 lg:w-1/4`}
     >
-      <div className="flex flex-col h-full">
-        <header className="p-3 bg-gray-100 flex justify-between items-center">
-          <UserProfile user={users["user1"]} />
-          <div className="flex items-center space-x-4 text-gray-500">
-            <MoreVertical size={24} />
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="md:hidden text-gray-500"
-            >
-              <X size={24} />
-            </button>
-          </div>
-        </header>
-
-        <div className="p-2 bg-gray-100 border-b border-gray-200">
-          <div className="relative">
-            <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              size={20}
-            />
-            <input
-              type="text"
-              placeholder="Search or start new chat"
-              className="w-full bg-white border border-gray-300 rounded-lg py-2 pl-10 pr-4 text-gray-800 focus:outline-none focus:ring-1 focus:ring-green-500"
-              value={searchTerm}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setSearchTerm(e.target.value)
-              }
-            />
-          </div>
-        </div>
-
-        <nav className="flex-1 overflow-y-auto">
-          <ul className="divide-y divide-gray-200">
-            {filteredContacts.map((contact) => (
+      <UserProfile user={currentUser} onLogout={onLogout} />
+      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
+        <ul>
+          {filteredContacts.length > 0 ? (
+            filteredContacts.map((contact: Contact, idx:number) => (
               <ContactItem
-                key={contact.id}
+                key={idx}
                 contact={contact}
                 onClick={() => {
                   onContactSelect(contact.id);
-                  if (window.innerWidth < 768) {
-                    setSidebarOpen(false);
-                  }
+                  setSidebarOpen(false); // Close sidebar on mobile after selection
                 }}
-                isActive={activeContactId === contact.id}
+                isActive={contact.id === activeContactId}
               />
-            ))}
-          </ul>
-        </nav>
+            ))
+          ) : (
+            <p className="text-center text-gray-500 p-4">No contacts found</p>
+          )}
+        </ul>
       </div>
     </aside>
   );
