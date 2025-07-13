@@ -40,7 +40,7 @@ const Register = () => {
   const onSubmit = async (data: TRegisterSchema) => {
     const { firstName, lastName, email, password } = data;
     try {
-      const responce = await axios.post("http://localhost:4000/user/register", {
+      const responce = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`, {
         firstName,
         lastName,
         email,

@@ -25,7 +25,7 @@ const LoginPage = () => {
     const { email, password } = data;
     try {
       const responce = await axios.post(
-        "http://localhost:4000/user/authenticate",
+        `${import.meta.env.VITE_BASE_URL}/user/authenticate`,
         { email, password }
       );
       console.log(responce);

@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 import axios from "axios";
 
-const socket = io("http://localhost:4000");
+const socket = io(import.meta.env.VITE_BASE_URL);
 
 const Dashboard = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -42,11 +42,10 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/user");
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/user`);
         const allUser = response.data.data;
         if (user) {
           const otherUser = allUser.filter((u: ApiUser) => u._id !== user._id);
-          console.log(otherUser);
 
           const contactData = otherUser.map((u: ApiUser) => ({
             id: u._id,
@@ -80,7 +79,7 @@ const Dashboard = () => {
       if (activeContactId && user) {
         setMessages((prev) => ({ ...prev, [activeContactId]: [] }));
         try {
-          const response = await axios.post("http://localhost:4000/message", {
+          const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/message`, {
             sender: user._id,
             receiver: activeContactId,
           });
