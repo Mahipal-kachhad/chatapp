@@ -26,11 +26,11 @@ const LoginPage = () => {
     try {
       const responce = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/user/authenticate`,
-        { email, password }
+        { email, password },
+        { withCredentials: true }
       );
       console.log(responce);
       if (responce.data.success === true) {
-        sessionStorage.setItem("user", JSON.stringify(responce.data.data));
         setData({ email: "", password: "" });
         navigate("/dashboard");
       }

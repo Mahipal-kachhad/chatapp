@@ -27,19 +27,29 @@ const Dashboard = () => {
   const activeMessages = activeContactId ? messages[activeContactId] || [] : [];
 
   useEffect(() => {
-    const storageUser = sessionStorage.getItem("user");
-    const parsedUser = storageUser ? JSON.parse(storageUser) : null;
-    if (!parsedUser) {
-      toast.error("please Login");
-      navigate("/");
-    } else {
-      setUser(parsedUser);
-      setLoading(false);
-      if (!socketInstance) {
-        const newSocket = io(import.meta.env.VITE_BASE_URL);
-        setSocketInstance(newSocket);
+    const fetchMe = async () => {
+      try {
+        const userdata = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/user/me`,
+          { withCredentials: true }
+        );
+        if (!userdata.data.success) {
+          toast.error("please Login");
+          navigate("/");
+        } else {
+          setUser(userdata.data.data);
+          setLoading(false);
+          if (!socketInstance) {
+            const newSocket = io(import.meta.env.VITE_BASE_URL);
+            setSocketInstance(newSocket);
+          }
+        }
+      } catch {
+        toast.error("please Login");
+        navigate("/");
       }
-    }
+    };
+    fetchMe();
   }, [navigate, socketInstance]);
 
   useEffect(() => {
@@ -54,7 +64,7 @@ const Dashboard = () => {
 
           const contactData = otherUser.map((u: ApiUser) => ({
             id: u._id,
-            name: `${u.firstName} ${u.lastName}`,
+            name: `${u.firstName} ${u.lastName ? u.lastName : ""}`,
             lastMessage: "",
             timeStamp: "",
             unread: 0,
@@ -72,10 +82,17 @@ const Dashboard = () => {
     }
   }, [user]);
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("user");
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/user/logout`,
+        {},
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
     setUser(null);
-
     toast.success("Logged out successfully");
     navigate("/");
   };

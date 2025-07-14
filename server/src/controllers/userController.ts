@@ -70,14 +70,13 @@ export const authenticateUser = async (
 
       res.cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
+        secure: false, 
+        sameSite: "lax",
         maxAge: 3600000,
       });
-      
+
       res.status(200).json({
         success: true,
-        data: user,
       });
     }
   } catch (error: any) {
@@ -108,4 +107,26 @@ export const getAllUser = async (
       error: error.message,
     });
   }
+};
+
+export const getMe = (req: Request, res: Response<ApiResponse<IUser>>) => {
+  const userId = (req as any).user.userId;
+  userModel.findById(userId).then((user) => {
+    res.status(200).json({
+      success: true,
+      data: user,
+    });
+  });
+};
+
+export const logOut = (
+  req: Request,
+  res: Response<ApiResponse<{ success: boolean }>>
+) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+  });
+  res.json({ success: true });
 };

@@ -1,23 +1,20 @@
-import { NextFunction, Request, Response } from "express";
+import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 
-export const requireAuth = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const token = req.cookies.token;
-  if (!token)
-    return res.status(401).json({
+export const requireAuth: RequestHandler = (req, res, next) => {
+  const token = req.cookies?.token || (req.headers.authorization && req.headers.authorization.split(" ")[1]);
+  if (!token) {
+    res.status(401).json({
       success: false,
       error: "unauthorized",
     });
-
+    return;
+  }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "MAka0055");
     (req as any).user = decoded;
     next();
   } catch (error: any) {
-    return res.status(401).json({ success: false, error: "invalid token" });
+    res.status(401).json({ success: false, error: "invalid token" });
   }
 };
