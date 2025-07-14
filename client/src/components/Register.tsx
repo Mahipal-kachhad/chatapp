@@ -46,7 +46,6 @@ const Register = () => {
         email,
         password,
       });
-      console.log(responce);
       if (responce.data.success) {
         toast.success("registered successfully");
         navigate("/");

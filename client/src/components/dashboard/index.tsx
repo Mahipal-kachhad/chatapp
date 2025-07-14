@@ -10,10 +10,8 @@ import ChatWindow from "./MainChat";
 import Sidebar from "./Sidebar";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import axios from "axios";
-
-const socket = io(import.meta.env.VITE_BASE_URL);
 
 const Dashboard = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -22,6 +20,7 @@ const Dashboard = () => {
   const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<ApiUser | null>(null);
+  const [socketInstance, setSocketInstance] = useState<Socket | null>(null);
 
   const navigate = useNavigate();
   const activeContact = contacts.find((c) => c.id === activeContactId);
@@ -36,13 +35,19 @@ const Dashboard = () => {
     } else {
       setUser(parsedUser);
       setLoading(false);
+      if (!socketInstance) {
+        const newSocket = io(import.meta.env.VITE_BASE_URL);
+        setSocketInstance(newSocket);
+      }
     }
-  }, [navigate]);
+  }, [navigate, socketInstance]);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/user`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/user`
+        );
         const allUser = response.data.data;
         if (user) {
           const otherUser = allUser.filter((u: ApiUser) => u._id !== user._id);
@@ -70,6 +75,7 @@ const Dashboard = () => {
   const handleLogout = () => {
     sessionStorage.removeItem("user");
     setUser(null);
+
     toast.success("Logged out successfully");
     navigate("/");
   };
@@ -79,10 +85,13 @@ const Dashboard = () => {
       if (activeContactId && user) {
         setMessages((prev) => ({ ...prev, [activeContactId]: [] }));
         try {
-          const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/message`, {
-            sender: user._id,
-            receiver: activeContactId,
-          });
+          const response = await axios.post(
+            `${import.meta.env.VITE_BASE_URL}/message`,
+            {
+              sender: user._id,
+              receiver: activeContactId,
+            }
+          );
           setMessages((prev) => ({
             ...prev,
             [activeContactId]: response.data.data.map((msg: IMessage) => ({
@@ -105,30 +114,32 @@ const Dashboard = () => {
   }, [activeContactId, user]);
 
   useEffect(() => {
-    socket.on("newMessage", (message: IMessage) => {
-      const contactId =
-        message.sender === user?._id ? message.receiver : message.sender;
-      const newMessage: Message = {
-        id: message._id,
-        sender: message.sender,
-        text: message.message,
-        time: new Date(message.createdAt).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
+    if (socketInstance && user) {
+      socketInstance.on("newMessage", (message: IMessage) => {
+        const contactId =
+          message.sender === user?._id ? message.receiver : message.sender;
+        const newMessage: Message = {
+          id: message._id,
+          sender: message.sender,
+          text: message.message,
+          time: new Date(message.createdAt).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        };
+        setMessages((prev) => ({
+          ...prev,
+          [contactId]: [...(prev[contactId] || []), newMessage],
+        }));
+      });
+      return () => {
+        socketInstance.off("newMessage");
       };
-      setMessages((prev) => ({
-        ...prev,
-        [contactId]: [...(prev[contactId] || []), newMessage],
-      }));
-    });
-    return () => {
-      socket.off("newMessage");
-    };
-  }, [user]);
+    }
+  }, [socketInstance, user]);
 
   const handleSendMessage = (text: string) => {
-    if (!activeContactId || !user) return;
+    if (!activeContactId || !user || !socketInstance) return;
 
     const messageData = {
       sender: user._id,
@@ -136,7 +147,7 @@ const Dashboard = () => {
       message: text,
     };
 
-    socket.emit("sendMessage", messageData);
+    socketInstance.emit("sendMessage", messageData);
   };
 
   useEffect(() => {

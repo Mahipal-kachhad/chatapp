@@ -30,11 +30,7 @@ const LoginPage = () => {
       );
       console.log(responce);
       if (responce.data.success === true) {
-        sessionStorage.setItem("user", JSON.stringify(responce.data.data.user));
-        sessionStorage.setItem(
-          "token",
-          JSON.stringify(responce.data.data.token)
-        );
+        sessionStorage.setItem("user", JSON.stringify(responce.data.data));
         setData({ email: "", password: "" });
         navigate("/dashboard");
       }

@@ -39,7 +39,7 @@ export const registerUser = async (
 
 export const authenticateUser = async (
   req: AuthenticateRequest,
-  res: Response<ApiResponse<{ user: IUser; token: string }>>
+  res: Response<ApiResponse<IUser>>
 ) => {
   try {
     const { email, password } = req.body;
@@ -51,13 +51,16 @@ export const authenticateUser = async (
         success: false,
         error: "invalid credentials",
       });
+      return;
     } else {
       const isMatch = await bcrypt.compare(password, user.password!);
-      if (!isMatch)
+      if (!isMatch) {
         res.status(401).json({
           success: false,
           error: "invalid credentials",
         });
+        return;
+      }
 
       const token = jwt.sign(
         { userId: user._id },
@@ -65,9 +68,16 @@ export const authenticateUser = async (
         { expiresIn: "1h" }
       );
 
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
+        maxAge: 3600000,
+      });
+      
       res.status(200).json({
         success: true,
-        data: { user, token },
+        data: user,
       });
     }
   } catch (error: any) {

@@ -6,8 +6,6 @@ export interface IUser {
   email: string;
   password: string;
   avatar?: string;
-  _id: string;
-  __v: number;
 }
 
 export interface RegisterRequest extends Request {
