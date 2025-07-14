@@ -11,13 +11,16 @@ const UserProfile: FC<UserProfileProps> = ({ user, onLogout }) => {
   if (!user) return null;
   const userName = `${user.firstName} ${user.lastName}`;
   const userInitial = user.firstName.charAt(0);
+  const avatarUrl = user.avatar
+    ? `${import.meta.env.VITE_BASE_URL}/${user.avatar.replace(/\\/g, '/')}`
+    : `https://placehold.co/100x100/7F56D9/FFFFFF?text=${userInitial}`;
 
   return (
     <div className="flex items-center space-x-4 p-3 border-b border-gray-200">
       <img
-        src={`https://placehold.co/100x100/7F56D9/FFFFFF?text=${userInitial}`}
+        src={avatarUrl}
         alt={userName}
-        className="w-10 h-10 rounded-full"
+        className="w-10 h-10 rounded-full object-cover"
       />
       <div className="flex-1 min-w-0">
         <h3 className="font-semibold text-gray-800 truncate">{userName}</h3>

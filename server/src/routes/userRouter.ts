@@ -21,9 +21,7 @@ router.post(
 );
 router.post("/authenticate", validateLogin(LoginSchema), authenticateUser);
 router.get("/", getAllUser);
-
 router.get("/me", requireAuth, getMe);
-
 router.post("/logout", logOut);
 
 export default router;

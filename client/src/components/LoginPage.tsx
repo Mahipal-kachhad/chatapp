@@ -29,7 +29,6 @@ const LoginPage = () => {
         { email, password },
         { withCredentials: true }
       );
-      console.log(responce);
       if (responce.data.success === true) {
         setData({ email: "", password: "" });
         navigate("/dashboard");

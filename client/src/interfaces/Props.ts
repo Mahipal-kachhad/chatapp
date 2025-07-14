@@ -4,6 +4,7 @@ export interface ApiUser {
   firstName: string;
   lastName: string;
   _id: string;
+  avatar?: string;
 }
 
 export interface User {
