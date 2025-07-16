@@ -9,6 +9,6 @@ const router = Router();
 
 router.post("/add", addMessage);
 router.delete("/delete", deleteMessage);
-router.post("/", getMessages);
+router.get("/", getMessages);
 
 export default router;

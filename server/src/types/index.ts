@@ -46,7 +46,7 @@ export interface NewMessageRequest {
 }
 
 export interface GetMessagesRequest {
-  body: {
+  query: {
     sender: string;
     receiver: string;
   };

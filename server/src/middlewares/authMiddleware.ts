@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 
 export const requireAuth: RequestHandler = (req, res, next) => {
-  const token = req.cookies?.token || (req.headers.authorization && req.headers.authorization.split(" ")[1]);
+  const token = req.cookies?.token;
   if (!token) {
     res.status(401).json({
       success: false,

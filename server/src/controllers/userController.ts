@@ -70,7 +70,7 @@ export const authenticateUser = async (
 
       res.cookie("token", token, {
         httpOnly: true,
-        secure: false, 
+        secure: false,
         sameSite: "lax",
         maxAge: 3600000,
       });
@@ -109,14 +109,23 @@ export const getAllUser = async (
   }
 };
 
-export const getMe = (req: Request, res: Response<ApiResponse<IUser>>) => {
-  const userId = (req as any).user.userId;
-  userModel.findById(userId).then((user) => {
+export const getMe = async (
+  req: Request,
+  res: Response<ApiResponse<IUser>>
+) => {
+  try {
+    const userId = (req as any).user.userId;
+    const user = await userModel.findById(userId, "firstName lastName _id");
     res.status(200).json({
       success: true,
       data: user,
     });
-  });
+  } catch (error: any) {
+    res.status(401).json({
+      success: false,
+      error: "invalid userId",
+    });
+  }
 };
 
 export const logOut = (

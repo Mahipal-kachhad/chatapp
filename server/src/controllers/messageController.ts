@@ -31,7 +31,7 @@ export const getMessages = async (
   res: Response<ApiResponse<IMessage[]>>
 ) => {
   try {
-    const { sender, receiver } = req.body;
+    const { sender, receiver } = req.query;
     if (!sender || !receiver) {
       res.status(500).json({
         success: false,

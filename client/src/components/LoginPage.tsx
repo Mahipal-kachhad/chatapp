@@ -3,12 +3,14 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import type { ApiErrorResponse } from "../interfaces/Props";
+import { Eye, EyeOff } from "lucide-react";
 
 interface Data {
   email: string;
   password: string;
 }
 const LoginPage = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
   const [data, setData] = useState<Data>({
     email: "",
@@ -30,7 +32,6 @@ const LoginPage = () => {
         { withCredentials: true }
       );
       if (responce.data.success === true) {
-        setData({ email: "", password: "" });
         navigate("/dashboard");
       }
     } catch (err) {
@@ -66,15 +67,24 @@ const LoginPage = () => {
             <label htmlFor="password" className="block pb-1 text-gray-700">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={data.password}
-              onChange={handleChange}
-              className="w-full bg-gray-100 text-lg p-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
-              required
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={data.password}
+                onChange={handleChange}
+                className="w-full bg-gray-100 text-lg p-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
+                required
+              />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500">
+                {showPassword ? (
+                  <EyeOff size={20} onClick={() => setShowPassword(false)} />
+                ) : (
+                  <Eye size={20} onClick={() => setShowPassword(true)} />
+                )}
+              </div>
+            </div>
           </div>
           <div>
             <input

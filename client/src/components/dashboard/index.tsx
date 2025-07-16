@@ -56,12 +56,12 @@ const Dashboard = () => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/user`
+          `${import.meta.env.VITE_BASE_URL}/user`,
+          { withCredentials: true }
         );
         const allUser = response.data.data;
         if (user) {
           const otherUser = allUser.filter((u: ApiUser) => u._id !== user._id);
-
           const contactData = otherUser.map((u: ApiUser) => ({
             id: u._id,
             name: `${u.firstName} ${u.lastName ? u.lastName : ""}`,
@@ -102,11 +102,13 @@ const Dashboard = () => {
       if (activeContactId && user) {
         setMessages((prev) => ({ ...prev, [activeContactId]: [] }));
         try {
-          const response = await axios.post(
+          const response = await axios.get(
             `${import.meta.env.VITE_BASE_URL}/message`,
             {
-              sender: user._id,
-              receiver: activeContactId,
+              params: {
+                sender: user._id,
+                receiver: activeContactId,
+              },
             }
           );
           setMessages((prev) => ({
@@ -118,6 +120,7 @@ const Dashboard = () => {
               time: new Date(msg.createdAt).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
+                hour12: true,
               }),
             })),
           }));
@@ -134,7 +137,7 @@ const Dashboard = () => {
     if (socketInstance && user) {
       socketInstance.on("newMessage", (message: IMessage) => {
         const contactId =
-          message.sender === user?._id ? message.receiver : message.sender;
+          message.sender === user._id ? message.receiver : message.sender;
         const newMessage: Message = {
           id: message._id,
           sender: message.sender,
@@ -142,6 +145,7 @@ const Dashboard = () => {
           time: new Date(message.createdAt).toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
+            hour12: true,
           }),
         };
         setMessages((prev) => ({
