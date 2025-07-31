@@ -70,8 +70,8 @@ export const authenticateUser = async (
 
       res.cookie("token", token, {
         httpOnly: true,
-        secure: false,
-        sameSite: "lax",
+        secure: true,
+        sameSite: "none",
         maxAge: 3600000,
       });
 
@@ -128,14 +128,11 @@ export const getMe = async (
   }
 };
 
-export const logOut = (
-  req: Request,
-  res: Response<ApiResponse<{}>>
-) => {
+export const logOut = (req: Request, res: Response<ApiResponse<{}>>) => {
   res.clearCookie("token", {
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
   });
   res.json({ success: true });
 };
