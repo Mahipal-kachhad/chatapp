@@ -130,7 +130,7 @@ export const getMe = async (
 
 export const logOut = (
   req: Request,
-  res: Response<ApiResponse<{ success: boolean }>>
+  res: Response<ApiResponse<{}>>
 ) => {
   res.clearCookie("token", {
     httpOnly: true,

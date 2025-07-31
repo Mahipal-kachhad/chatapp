@@ -14,7 +14,7 @@ export const requireAuth: RequestHandler = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "MAka0055");
     (req as any).user = decoded;
     next();
-  } catch (error: any) {
+  } catch{
     res.status(401).json({ success: false, error: "invalid token" });
   }
 };
