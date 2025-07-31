@@ -11,7 +11,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://newslyus.com",
+    origin: "https://chatapp-one-theta.vercel.app",
     methods: ["GET", "POST"],
     credentials: true,
   },
