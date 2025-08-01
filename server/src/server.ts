@@ -11,7 +11,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://chatapp-one-green.vercel.app/",
+    origin: "https://chatapp-one-green.vercel.app",
     methods: ["GET", "POST"],
     credentials: true,
   },
