@@ -8,7 +8,7 @@ import cookieParser from "cookie-parser";
 const app = express();
 app.use(
   cors({
-    origin: "https://chatapp-one-theta.vercel.app",
+    origin: "https://newslyus.com",
     credentials: true,
   })
 );
