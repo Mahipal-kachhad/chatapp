@@ -8,6 +8,14 @@ This is the backend for the chat application, built with Node.js, Express, and T
 - MongoDB integration
 - File uploads
 
+## Table of Contents
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Environment Variables](#environment-variables)
+- [API Documentation](#api-documentation)
+- [Useful Scripts](#useful-scripts)
+- [License](#license)
+
 ## Getting Started
 
 ### Prerequisites
@@ -31,6 +39,67 @@ Create a `.env` file in the `server` directory:
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 PORT=5000
+```
+
+## Project Structure
+```
+server/
+  src/
+    controllers/      # Route handlers for user and message APIs
+    middlewares/      # Auth and validation middleware
+    models/           # Mongoose models for User and Message
+    routes/           # API route definitions
+    types/            # TypeScript types and schemas
+    config/           # Database configuration
+  uploads/            # Uploaded files
+  ...
+```
+
+## API Documentation
+
+### Authentication
+
+#### Register
+- **POST** `/api/users/register`
+  - Request Body: `{ username, email, password }`
+  - Response: `201 Created` with user info and JWT
+
+#### Login
+- **POST** `/api/users/login`
+  - Request Body: `{ email, password }`
+  - Response: `200 OK` with user info and JWT
+
+#### Get Current User
+- **GET** `/api/users/me`
+  - Headers: `Authorization: Bearer <token>`
+  - Response: `200 OK` with user info
+
+### Messaging
+
+#### Send Message
+- **POST** `/api/messages/send`
+  - Headers: `Authorization: Bearer <token>`
+  - Request Body: `{ recipientId, content }`
+  - Response: `201 Created` with message info
+
+#### Get Messages
+- **GET** `/api/messages`
+  - Headers: `Authorization: Bearer <token>`
+  - Query Params: `recipientId` (optional)
+  - Response: `200 OK` with array of messages
+
+### File Uploads
+- **POST** `/api/messages/upload`
+  - Headers: `Authorization: Bearer <token>`
+  - Form Data: `file`
+  - Response: `200 OK` with file info
+
+### Error Handling
+All endpoints return errors in the format:
+```json
+{
+  "error": "Error message"
+}
 ```
 
 ## Project Structure
