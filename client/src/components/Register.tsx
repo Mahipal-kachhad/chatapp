@@ -30,6 +30,7 @@ type TRegisterSchema = z.infer<typeof RegisterSchema>;
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const {
     register,
@@ -40,6 +41,7 @@ const Register = () => {
   });
 
   const onSubmit = async (data: TRegisterSchema) => {
+    setLoading(true);
     const { firstName, lastName, email, password } = data;
     try {
       const responce = await axios.post(
@@ -58,6 +60,8 @@ const Register = () => {
     } catch (error) {
       console.log(error);
       toast.error("internal server error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -140,11 +144,23 @@ const Register = () => {
             <p className="text-red-700 text-sm mt-1">{errors.rePassword.message}</p>
           )}
         </div>
-        <input
+        <button
           type="submit"
-          value="Register"
-          className="w-full px-6 py-3 bg-slate-700 hover:bg-slate-800 rounded-xl text-white font-semibold shadow-lg transition-colors duration-200 text-lg mb-4"
-        />
+          className={`w-full px-6 py-3 rounded-xl text-white font-semibold shadow-lg transition-colors duration-200 text-lg mb-4 ${loading ? 'bg-slate-400 cursor-not-allowed' : 'bg-slate-700 hover:bg-slate-800'}`}
+          disabled={loading}
+        >
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+              </svg>
+              Registering...
+            </span>
+          ) : (
+            'Register'
+          )}
+        </button>
         <p className="text-center text-slate-600 mt-2">Already have an account?</p>
         <Link
           className="block mx-auto w-full px-6 py-3 mt-3 bg-slate-500 hover:bg-slate-700 rounded-xl text-white font-semibold shadow transition-colors duration-200 text-center"
