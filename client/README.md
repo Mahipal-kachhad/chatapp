@@ -1,12 +1,15 @@
 
+
 # Client (Frontend)
 
 This is the frontend for the chat application, built with React, TypeScript, and Vite.
 
 ## Features
 - User authentication (login/register)
-- Dashboard with chat functionality
+- Dashboard with real-time chat functionality
 - Responsive UI with Tailwind CSS
+- Modular component structure
+- Type-safe interfaces
 
 ## Getting Started
 
@@ -34,21 +37,23 @@ VITE_BASE_URL=http://localhost:5000
 ```
 client/
   src/
-    components/
-    images/
-    interfaces/
-  public/
+    components/    # Reusable React components
+    images/        # Static assets
+    interfaces/    # TypeScript interfaces
+  public/          # Static public files
   ...
 ```
 
 ## Linting & Formatting
 - ESLint is configured for code quality.
 - Use `npm run lint` to check for issues.
+- Prettier for consistent code formatting.
 
 ## Useful Scripts
 - `npm run dev` — Start development server
 - `npm run build` — Build for production
 - `npm run lint` — Run linter
+
 
 ## License
 MIT

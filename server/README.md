@@ -23,6 +23,32 @@ This is the backend for the chat application, built with Node.js, Express, and T
 ### Prerequisites
 - Node.js (v18+ recommended)
 - npm or yarn
+
+# Server (Backend)
+
+This is the backend for the chat application, built with Node.js, Express, and TypeScript.
+
+## Features
+- RESTful API for authentication and messaging
+- JWT-based authentication with httpOnly cookies
+- MongoDB integration via Mongoose
+- File uploads
+- Modular route/controller structure
+- Secure authentication
+
+## Table of Contents
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Environment Variables](#environment-variables)
+- [API Documentation](#api-documentation)
+- [Useful Scripts](#useful-scripts)
+- [License](#license)
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v18+ recommended)
+- npm or yarn
 - MongoDB instance (local or cloud)
 
 ### Installation
@@ -71,42 +97,17 @@ server/
   - Request Body: `{ email, password }`
   - Response: `200 OK` with user info and JWT (JWT is set in an httpOnly cookie)
 
-#### Get Current User
-- **GET** `/api/users/me`
-  - Authentication: httpOnly cookie (JWT)
-  - Response: `200 OK` with user info
-
 ### Messaging
+- **GET** `/api/messages` — Get all messages
+- **POST** `/api/messages` — Send a new message
 
-#### Send Message
-- **POST** `/api/messages/send`
-  - Authentication: httpOnly cookie (JWT)
-  - Request Body: `{ recipientId, content }`
-  - Response: `201 Created` with message info
+## Useful Scripts
+- `npm run dev` — Start development server
+- `npm run build` — Build for production
+- `npm run lint` — Run linter
 
-#### Get Messages
-- **GET** `/api/messages`
-  - Authentication: httpOnly cookie (JWT)
-  - Query Params: `recipientId` (optional)
-  - Response: `200 OK` with array of messages
-
-### File Uploads
- - **POST** `/api/messages/upload`
-   - Authentication: httpOnly cookie (JWT)
-   - Form Data: `file`
-   - Response: `200 OK` with file info
-
-### Error Handling
-All endpoints return errors in the format:
-```json
-{
-  "success":false,
-  "error": "Error message"
-}
-```
-
-## Project Structure
-```
+## License
+MIT
 server/
   src/
     controllers/
