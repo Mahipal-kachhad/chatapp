@@ -8,6 +8,8 @@ This is the backend for the chat application, built with Node.js, Express, and T
 - MongoDB integration
 - File uploads
 
+- Secure authentication using httpOnly cookies
+
 ## Table of Contents
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
@@ -62,42 +64,43 @@ server/
 #### Register
 - **POST** `/api/users/register`
   - Request Body: `{ username, email, password }`
-  - Response: `201 Created` with user info and JWT
+  - Response: `201 Created` with user info and JWT (JWT is set in an httpOnly cookie)
 
 #### Login
 - **POST** `/api/users/login`
   - Request Body: `{ email, password }`
-  - Response: `200 OK` with user info and JWT
+  - Response: `200 OK` with user info and JWT (JWT is set in an httpOnly cookie)
 
 #### Get Current User
 - **GET** `/api/users/me`
-  - Headers: `Authorization: Bearer <token>`
+  - Authentication: httpOnly cookie (JWT)
   - Response: `200 OK` with user info
 
 ### Messaging
 
 #### Send Message
 - **POST** `/api/messages/send`
-  - Headers: `Authorization: Bearer <token>`
+  - Authentication: httpOnly cookie (JWT)
   - Request Body: `{ recipientId, content }`
   - Response: `201 Created` with message info
 
 #### Get Messages
 - **GET** `/api/messages`
-  - Headers: `Authorization: Bearer <token>`
+  - Authentication: httpOnly cookie (JWT)
   - Query Params: `recipientId` (optional)
   - Response: `200 OK` with array of messages
 
 ### File Uploads
-- **POST** `/api/messages/upload`
-  - Headers: `Authorization: Bearer <token>`
-  - Form Data: `file`
-  - Response: `200 OK` with file info
+ - **POST** `/api/messages/upload`
+   - Authentication: httpOnly cookie (JWT)
+   - Form Data: `file`
+   - Response: `200 OK` with file info
 
 ### Error Handling
 All endpoints return errors in the format:
 ```json
 {
+  "success":false,
   "error": "Error message"
 }
 ```

@@ -43,65 +43,60 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="items-center flex h-screen bg-[#E5DDD5]">
-      <div className="w-full max-w-md mx-auto bg-white rounded-md px-8 py-8 shadow-lg border border-gray-200">
-        <h1 className="w-fit mx-auto text-3xl py-2 font-semibold text-gray-800">
-          Welcome
-        </h1>
-        <form onSubmit={handleSubmit}>
-          <div className="pb-4">
-            <label htmlFor="email" className="block pb-1 text-gray-700">
-              Email
-            </label>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-300">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-sm bg-white rounded-2xl shadow-xl px-8 py-10 border border-slate-200"
+      >
+        <h1 className="text-2xl font-bold text-slate-700 mb-6 text-center">Sign In</h1>
+        <div className="mb-5">
+          <label htmlFor="email" className="block mb-2 text-slate-600 font-medium">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            value={data.email}
+            onChange={handleChange}
+            className="w-full bg-slate-100 text-base p-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-400 text-slate-800 placeholder-slate-400 shadow-sm"
+            placeholder="Enter your email"
+          />
+        </div>
+        <div className="mb-7">
+          <label htmlFor="password" className="block mb-2 text-slate-600 font-medium">Password</label>
+          <div className="relative">
             <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              value={data.email}
+              type={showPassword ? "text" : "password"}
+              id="password"
+              name="password"
+              value={data.password}
               onChange={handleChange}
-              className="w-full bg-gray-100 text-lg p-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
+              className="w-full bg-slate-100 text-base p-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-400 text-slate-800 placeholder-slate-400 shadow-sm"
+              required
+              placeholder="Enter your password"
             />
-          </div>
-          <div className="pb-4">
-            <label htmlFor="password" className="block pb-1 text-gray-700">
-              Password
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={data.password}
-                onChange={handleChange}
-                className="w-full bg-gray-100 text-lg p-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
-                required
-              />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500">
-                {showPassword ? (
-                  <EyeOff size={20} onClick={() => setShowPassword(false)} />
-                ) : (
-                  <Eye size={20} onClick={() => setShowPassword(true)} />
-                )}
-              </div>
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-slate-500">
+              {showPassword ? (
+                <EyeOff size={20} onClick={() => setShowPassword(false)} />
+              ) : (
+                <Eye size={20} onClick={() => setShowPassword(true)} />
+              )}
             </div>
           </div>
-          <div>
-            <input
-              type="submit"
-              value="Log In"
-              className="w-fit mx-auto block px-6 py-2 bg-green-500 hover:bg-green-600 rounded my-4 text-white font-semibold transition-colors duration-200"
-            />
-          </div>
-        </form>
-        <p className="text-center text-gray-700">Don't have an account?</p>
+        </div>
+        <input
+          type="submit"
+          value="Log In"
+          className="w-full px-6 py-3 bg-slate-700 hover:bg-slate-800 rounded-xl text-white font-semibold shadow-lg transition-colors duration-200 text-lg mb-4"
+        />
+        <p className="text-center text-slate-600 mt-2">Don't have an account?</p>
         <Link
-          className="block mx-auto w-fit px-6 py-2 my-3 bg-green-500 hover:bg-green-600 rounded text-white font-semibold transition-colors duration-200"
+          className="block mx-auto w-full px-6 py-3 mt-3 bg-slate-500 hover:bg-slate-700 rounded-xl text-white font-semibold shadow transition-colors duration-200 text-center"
           to={"/register"}
         >
           Register
         </Link>
-      </div>
+      </form>
     </div>
   );
 };

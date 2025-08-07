@@ -179,14 +179,20 @@ const Dashboard = () => {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center h-screen">
-        <h1 className="text-green-600 text-lg">loading</h1>
+      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-slate-100 to-slate-300">
+        <div className="flex flex-col items-center">
+          <svg className="animate-spin h-10 w-10 text-slate-400 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+          </svg>
+          <h1 className="text-slate-500 text-xl font-semibold">Loading...</h1>
+        </div>
       </div>
     );
 
   return (
-    <main className="h-screen w-full bg-gray-200 font-sans antialiased">
-      <div className="relative flex h-full w-full max-w-7xl mx-auto shadow-lg">
+    <main className="h-screen w-full bg-gradient-to-br from-slate-100 to-slate-300 font-sans antialiased">
+      <div className="relative flex h-full w-full max-w-6xl mx-auto shadow-xl rounded-2xl overflow-hidden border border-slate-200">
         <Sidebar
           contacts={contacts}
           onContactSelect={setActiveContactId}
@@ -196,7 +202,7 @@ const Dashboard = () => {
           currentUser={user}
           onLogout={handleLogout}
         />
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col bg-white/80 backdrop-blur-md">
           <ChatWindow
             contact={activeContact}
             messages={activeMessages}

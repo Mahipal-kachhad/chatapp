@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { IMessage } from "../types";
 
-const messageSchema = new mongoose.Schema<IMessage>(
+const messageSchema = new mongoose.Schema(
   {
     sender: { type: String, required: true },
     receiver: { type: String, required: true },

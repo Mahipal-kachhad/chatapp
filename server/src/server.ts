@@ -11,15 +11,13 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://chatapp-one-green.vercel.app",
+    origin: "https://chatapp-one-theta.vercel.app",
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
 
 io.on("connection", (socket) => {
-  console.log(`user connected : ${socket.id}`);
-
   socket.on("sendMessage", async (data) => {
     try {
       const newMessage = await messageModel.create(data);
@@ -27,10 +25,6 @@ io.on("connection", (socket) => {
     } catch (error) {
       console.error("error saving message", error);
     }
-  });
-
-  socket.on("disconnect", () => {
-    console.log("disconnected", socket.id);
   });
 });
 

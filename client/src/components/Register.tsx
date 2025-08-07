@@ -4,7 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import * as z from "zod/v4";
 
 const RegisterSchema = z
@@ -62,103 +62,97 @@ const Register = () => {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center bg-[#E5DDD5]">
-      <div className="bg-white px-8 py-8 rounded-md shadow-lg w-full max-w-md border border-gray-200">
-        <h1 className="py-4 text-center text-2xl font-semibold text-gray-800">
-          Register Your Self
-        </h1>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex gap-4">
-            <div className="mb-5 flex-1">
-              <label className="block mb-1 text-gray-700" htmlFor="firstName">
-                First Name <span className="text-red-600">*</span>
-              </label>
-              <input
-                className="bg-gray-100 w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
-                id="firstName"
-                {...register("firstName")}
-              />
-              {errors.firstName && (
-                <p className="text-red-700 text-sm">
-                  {errors.firstName.message}
-                </p>
-              )}
-            </div>
-            <div className="mb-5 flex-1">
-              <label className="block mb-1 text-gray-700" htmlFor="lastName">
-                Last Name
-              </label>
-              <input
-                className="bg-gray-100 w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
-                id="lastName"
-                {...register("lastName")}
-              />
-              {errors.lastName && (
-                <p className="text-red-700 text-sm">
-                  {errors.lastName?.message}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="mb-5">
-            <label className="block mb-1 text-gray-700" htmlFor="email">
-              Email <span className="text-red-600">*</span>
-            </label>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-300">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full max-w-lg bg-white rounded-2xl shadow-xl px-12 py-12 border border-slate-200"
+      >
+        <h1 className="text-2xl font-bold text-slate-700 mb-6 text-center">Register</h1>
+        <div className="mb-5 flex flex-col gap-4 sm:flex-row">
+          <div className="flex-1">
+            <label htmlFor="firstName" className="block mb-2 text-slate-600 font-medium">First Name <span className="text-red-600">*</span></label>
             <input
-              className="bg-gray-100 w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
-              id="email"
-              {...register("email")}
+              className="w-full bg-slate-100 border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-slate-400 text-slate-800 placeholder-slate-400 shadow-sm"
+              id="firstName"
+              {...register("firstName")}
+              placeholder="First Name"
             />
-            {errors.email && (
-              <p className="text-red-700 text-sm">{errors.email.message}</p>
+            {errors.firstName && (
+              <p className="text-red-700 text-sm mt-1">{errors.firstName.message}</p>
             )}
           </div>
-          <div className="mb-5">
-            <label className="block mb-1 text-gray-700" htmlFor="password">
-              Password <span className="text-red-600">*</span>
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                {...register("password")}
-                className="bg-gray-100 w-full border border-gray-300 rounded p-2 pr-10 focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
-                placeholder="Password"
-              />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500">
-                {showPassword ? (
-                  <EyeOff size={20} onClick={() => setShowPassword(false)} />
-                ) : (
-                  <Eye size={20} onClick={() => setShowPassword(true)} />
-                )}
-              </div>
-            </div>
-            {errors.password && (
-              <p className="text-red-700 text-sm">{errors.password.message}</p>
-            )}
-          </div>
-          <div className="mb-5">
-            <label className="block mb-1 text-gray-700" htmlFor="rePassword">
-              Reenter Password <span className="text-red-600">*</span>
-            </label>
+          <div className="flex-1">
+            <label htmlFor="lastName" className="block mb-2 text-slate-600 font-medium">Last Name</label>
             <input
-              className="bg-gray-100 w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-1 focus:ring-green-500 text-gray-800"
-              id="rePassword"
-              type="password"
-              {...register("rePassword")}
+              className="w-full bg-slate-100 border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-slate-400 text-slate-800 placeholder-slate-400 shadow-sm"
+              id="lastName"
+              {...register("lastName")}
+              placeholder="Last Name"
             />
-            {errors.rePassword && (
-              <p className="text-red-700 text-sm">
-                {errors.rePassword.message}
-              </p>
+            {errors.lastName && (
+              <p className="text-red-700 text-sm mt-1">{errors.lastName?.message}</p>
             )}
           </div>
+        </div>
+        <div className="mb-5">
+          <label htmlFor="email" className="block mb-2 text-slate-600 font-medium">Email <span className="text-red-600">*</span></label>
           <input
-            type="submit"
-            value="Register"
-            className="px-6 py-2 bg-green-500 hover:bg-green-600 block mx-auto rounded text-white font-semibold mb-4 transition-colors duration-200"
+            className="w-full bg-slate-100 border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-slate-400 text-slate-800 placeholder-slate-400 shadow-sm"
+            id="email"
+            {...register("email")}
+            placeholder="Email"
           />
-        </form>
-      </div>
+          {errors.email && (
+            <p className="text-red-700 text-sm mt-1">{errors.email.message}</p>
+          )}
+        </div>
+        <div className="mb-5">
+          <label htmlFor="password" className="block mb-2 text-slate-600 font-medium">Password <span className="text-red-600">*</span></label>
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              {...register("password")}
+              className="w-full bg-slate-100 border border-slate-300 rounded-lg p-3 pr-10 focus:outline-none focus:ring-2 focus:ring-slate-400 text-slate-800 placeholder-slate-400 shadow-sm"
+              placeholder="Password"
+            />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-slate-500">
+              {showPassword ? (
+                <EyeOff size={20} onClick={() => setShowPassword(false)} />
+              ) : (
+                <Eye size={20} onClick={() => setShowPassword(true)} />
+              )}
+            </div>
+          </div>
+          {errors.password && (
+            <p className="text-red-700 text-sm mt-1">{errors.password.message}</p>
+          )}
+        </div>
+        <div className="mb-7">
+          <label htmlFor="rePassword" className="block mb-2 text-slate-600 font-medium">Reenter Password <span className="text-red-600">*</span></label>
+          <input
+            className="w-full bg-slate-100 border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-slate-400 text-slate-800 placeholder-slate-400 shadow-sm"
+            id="rePassword"
+            type="password"
+            {...register("rePassword")}
+            placeholder="Reenter Password"
+          />
+          {errors.rePassword && (
+            <p className="text-red-700 text-sm mt-1">{errors.rePassword.message}</p>
+          )}
+        </div>
+        <input
+          type="submit"
+          value="Register"
+          className="w-full px-6 py-3 bg-slate-700 hover:bg-slate-800 rounded-xl text-white font-semibold shadow-lg transition-colors duration-200 text-lg mb-4"
+        />
+        <p className="text-center text-slate-600 mt-2">Already have an account?</p>
+        <Link
+          className="block mx-auto w-full px-6 py-3 mt-3 bg-slate-500 hover:bg-slate-700 rounded-xl text-white font-semibold shadow transition-colors duration-200 text-center"
+          to={"/"}
+        >
+          Login
+        </Link>
+      </form>
     </div>
   );
 };

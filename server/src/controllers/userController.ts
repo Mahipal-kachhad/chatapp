@@ -2,12 +2,7 @@ import { Request, Response } from "express";
 import userModel from "../models/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import {
-  ApiResponse,
-  AuthenticateRequest,
-  IUser,
-  RegisterRequest,
-} from "../types";
+import { ApiResponse, IUser, RegisterRequest } from "../types";
 
 export const registerUser = async (
   req: RegisterRequest,
@@ -15,7 +10,6 @@ export const registerUser = async (
 ) => {
   try {
     const { firstName, lastName, email, password } = req.body;
-    const avatar = req.file?.path;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await userModel.create({
@@ -23,7 +17,6 @@ export const registerUser = async (
       lastName,
       email,
       password: hashedPassword,
-      avatar,
     });
     res.status(201).json({
       success: true,
@@ -38,7 +31,7 @@ export const registerUser = async (
 };
 
 export const authenticateUser = async (
-  req: AuthenticateRequest,
+  req: Request<{}, {}, { email: string; password: string }>,
   res: Response<ApiResponse<IUser>>
 ) => {
   try {
@@ -51,7 +44,6 @@ export const authenticateUser = async (
         success: false,
         error: "invalid credentials",
       });
-      return;
     } else {
       const isMatch = await bcrypt.compare(password, user.password!);
       if (!isMatch) {

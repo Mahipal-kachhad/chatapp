@@ -5,7 +5,6 @@ export interface IUser {
   lastName?: string;
   email: string;
   password: string;
-  avatar?: string;
 }
 
 export interface RegisterRequest extends Request {
@@ -15,7 +14,6 @@ export interface RegisterRequest extends Request {
     email: string;
     password: string;
   };
-  file?: Express.Multer.File;
 }
 
 export type ApiResponse<T> = {
@@ -24,21 +22,12 @@ export type ApiResponse<T> = {
   error?: string;
 };
 
-export interface AuthenticateRequest extends Request {
-  body: {
-    email: string;
-    password: string;
-  };
-}
-
 export interface IMessage {
   sender: string;
   receiver: string;
   message: string;
   createdAt: string;
   updatedAt: string;
-  _id: string;
-  __v: string;
 }
 
 export interface NewMessageRequest {
