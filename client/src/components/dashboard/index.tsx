@@ -177,13 +177,36 @@ const Dashboard = () => {
     }
   }, [contacts, activeContactId]);
 
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  });
+
   if (loading)
     return (
       <div className="flex justify-center items-center h-screen bg-gradient-to-br from-slate-100 to-slate-300">
         <div className="flex flex-col items-center">
-          <svg className="animate-spin h-10 w-10 text-slate-400 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+          <svg
+            className="animate-spin h-10 w-10 text-slate-400 mb-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v8z"
+            ></path>
           </svg>
           <h1 className="text-slate-500 text-xl font-semibold">Loading...</h1>
         </div>
@@ -203,13 +226,41 @@ const Dashboard = () => {
           onLogout={handleLogout}
         />
         <div className="flex-1 flex flex-col bg-white/80 backdrop-blur-md">
-          <ChatWindow
-            contact={activeContact}
-            messages={activeMessages}
-            onSendMessage={handleSendMessage}
-            onMenuClick={() => setSidebarOpen(true)}
-            currentUser={user}
-          />
+          {/* If mobile and no chat selected, show placeholder with button to open sidebar */}
+          {isMobile && !activeContact ? (
+            <div className="flex flex-1 flex-col items-center justify-center bg-[#F0F2F5] text-gray-500">
+              <svg
+                className="mb-4"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                width="48"
+                height="48"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  d="M8 12h8M8 12l4-4m-4 4l4 4"
+                />
+              </svg>
+              <h2 className="text-2xl font-semibold mb-2">No chat selected</h2>
+              <p className="mb-4">Tap below to open contacts</p>
+              <button
+                className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600"
+                onClick={() => setSidebarOpen(true)}
+              >
+                Open Contacts
+              </button>
+            </div>
+          ) : (
+            <ChatWindow
+              contact={activeContact}
+              messages={activeMessages}
+              onSendMessage={handleSendMessage}
+              onMenuClick={() => setSidebarOpen(true)}
+              currentUser={user}
+            />
+          )}
         </div>
       </div>
     </main>
